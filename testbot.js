@@ -25,7 +25,7 @@ const fs = require("fs");
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     
-    if (command.indexOf("/") !== -1 || command.indexOf("..") !== -1) {message.channel.send("Nice try."); return;}
+    if (message.content.indexOf("/") !== -1 || message.content.indexOf("..") !== -1) {message.channel.send("Nice try."); return;}
     
     try {
      let commandFile = require(`./commands/${command}.js`);
@@ -38,4 +38,5 @@ const fs = require("fs");
     
   });
 
-  client.login(config.token);
+
+  client.login(process.env.TOKEN);
