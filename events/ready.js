@@ -26,5 +26,5 @@ exports.run = (client) => {
         console.log("USER: " + table.username);
       }
   });
-  console.log(`Ready to server in ${trimCats} channels on ${client.guilds.size} servers, for a total of ${client.users.size - botCount} users.`)
+  console.log(`Ready to serve in ${trimCats} channels on ${client.guilds.size} servers, for a total of ${client.users.size - botCount} users.`)
 }

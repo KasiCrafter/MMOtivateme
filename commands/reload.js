@@ -9,5 +9,5 @@ exports.run = (client, message, args) => {
     return;
   }
 
-  message.reply(`The command ${args[0]} has been reloaded.`);
+  message.reply(`The command ${args[0]} has been reloaded.`); 
 };

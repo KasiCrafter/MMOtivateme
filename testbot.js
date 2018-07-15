@@ -2,11 +2,15 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
 const fs = require("fs");
+const heartbeat = require("./heartbeat.js");
 
-//client.on("ready", () => {
-  //console.log("I am ready!");
-//});
-  
+console.log("Bot is initializing...");
+
+//initialize http ping every 5 minutes as to keep the bot from timing out once 15 minutes pass.
+heartbeat.run();
+
+//Entering main bot code
+
  fs.readdir("./events/", (err, files) => {
     if (err) return console.error(err);
     files.forEach(file => {
@@ -17,25 +21,5 @@ const fs = require("fs");
     });
   });
   
-  client.on("message", message => {
-    
-    if (message.author.bot) return;
-    if (message.content.indexOf(config.prefix) !== 0) return;
-  
-    const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
-    const command = args.shift().toLowerCase();
-    
-    if (message.content.indexOf("/") !== -1 || message.content.indexOf("..") !== -1) {message.channel.send("Nice try."); return;}
-    
-    try {
-     let commandFile = require(`./commands/${command}.js`);
-      
-      commandFile.run(client, message, args);
-    }    
-    catch (err) {
-      console.error(err);
-    }
-    
-  });
 
- client.login(process.env.TOKEN);
+client.login(process.env.TOKEN).catch(console.error);
