@@ -5,14 +5,14 @@
   "name": "hello-express",
   "version": "0.0.1",
   "description": "A simple Node app built on Express, instantly up and running.",
-  "main": "server.js",
+  "main": "blank.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node testbot.js"
   },
   "dependencies": {
     "discord.js": "^11.3.2",
-    "express": "^4.16.3"
-  },
+    "express": "^4.16.3",
+    "sqlite3": "^4.0.1"},
   "engines": {
     "node": "8.x"
   },
