@@ -12,9 +12,8 @@ exports.run = (client) => {
       trimCats++;
     }
     else {
-      console.log("ROOM TYPE: " + type.type);        
-    }
-  
+      console.log("ROOM NAME: " + type.name + " | ROOM TYPE: " + type.type);        
+    }  
   });  
   
     client.users.forEach(table => {
@@ -26,5 +25,8 @@ exports.run = (client) => {
         console.log("USER: " + table.username);
       }
   });
-  console.log(`Ready to serve in ${trimCats} channels on ${client.guilds.size} servers, for a total of ${client.users.size - botCount} users.`)
+  console.log(`Ready to serve in ${trimCats} channels on ${client.guilds.size} servers, for a total of ${client.users.size - botCount} users.`);
+  let channel = client.channels.find("name", "general");  
+  //channel.send("Bot ready!");
+  console.timeEnd("boot");
 }
