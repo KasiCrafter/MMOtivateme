@@ -1,3 +1,4 @@
+console.time("boot");
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
@@ -19,7 +20,9 @@ heartbeat.run();
 
         client.on(eventName, (...args) => eventFunction.run(client, ...args));      
     });
-  });
-  
+  }); 
+
+
 
 client.login(process.env.TOKEN).catch(console.error);
+
