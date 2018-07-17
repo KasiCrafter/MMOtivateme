@@ -21,7 +21,7 @@ exports.run = (client, message, args) => {
       return;    
     }
     
-    let sliceRoom = args[1];
+    let sliceRoom = args[1].toLowerCase();
         
     if (args[1].startsWith("<")) {
       sliceRoom = args[1].slice(2, -1);
@@ -32,11 +32,52 @@ exports.run = (client, message, args) => {
     
     if (!channelStr) {
       if (!channelId) {
-          message.reply(`Could not find host room: **${sliceRoom}** in server.`);
+          message.reply(`Could not find host room: **${args[0]}** in server.`);
+          return;
+      }
+      else {
+       sliceRoom = ("<" + sliceRoom + ">"); 
       }
     }
+    else {
+      sliceRoom = ("#" + sliceRoom); 
+    }    
+      
+    message.channel.send(`Challenge **${message.mentions.users.first().username}** to a game of Cactus Cards in **${args[1]}**?`)
+    .then(message => {
+      message.react("⭕").then(() => message.react("✖"));
+    })
+    .catch(err => {
+      console.error(err);
+    });
     
-     message.reply(`Challenge **${message.mentions.users.first().username}** to a game of Cactus Cards in **${args[1]}**?`);
+    const filer = (reaction, user) => {
+      return ["⭕", "✖"].includes(reaction.emoji.name && user.id === message.author.id);
+    };
+    
+   /*message.react('👍').then(() => message.react('👎'));
+
+    const filter = (reaction, user) => {
+      return ['👍', '👎'].includes(reaction.emoji.name) && user.id === message.author.id;
+    };
+
+    message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
+    .then(collected => {
+        const reaction = collected.first();
+
+        if (reaction.emoji.name === '👍') {
+            message.reply('you reacted with a thumbs up.');
+        }
+        else {
+            message.reply('you reacted with a thumbs down.');
+        }
+    })
+    .catch(collected => {
+        console.log(``);
+        message.reply('');
+    });*/
+        
+                    
   }
   console.log("Cactus exited successfully.");
 }
