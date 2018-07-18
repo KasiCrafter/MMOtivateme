@@ -1,15 +1,13 @@
 const caller = require("../commands/cactus.js");
 
-function drawCards (num, pile, hand) {
-  for (num; num > 0; num--) {
-    if (pile.length == 0) {
-      return; 
-    }
-    hand.push(pile.shift()); 
-  }
-}
-
-exports.run = async (client, message, ...args) => {
+exports.run = async (client, message, args) => {
+  let sender = args[0];
+  let opponent = args[1];
+  let room = args[2];
+  
+  console.log(sender);
+  console.log(opponent);
+  console.log(room);
   
   let turnNum = 0;
   let deck = [];
@@ -17,6 +15,9 @@ exports.run = async (client, message, ...args) => {
   let opponentHand = [];
   let senderField = [{},{},{},{},{}];
   let opponentField = [{},{},{},{},{}];
+  
+  
+  gameLoop(sender, opponent, room);
   
   function gameLoop(sender, opponent, room) {
   
@@ -44,33 +45,76 @@ exports.run = async (client, message, ...args) => {
       {stars: 5, ability: "none", magnitude: 0}        
       );
       
+
+     /* for (let t = 0; t < deck.length; t++) {
+        console.log("Stars: " + deck[t].stars + " Ability: " + deck[t].ability);
+      }*/
+      
+      
       let swapIdx = 0;
       let swapHold = 0;
+      let length = deck.length - 1;
       
-      for (let d = deck.length; d > 0; d--) {
-        swapIdx = Math.floor(Math.random() * d);
+      
+      for (let d = length; d > 0; d--) {
+        swapIdx = Math.floor(Math.random() * length);
         swapHold = deck[d];
         deck[d] = deck[swapIdx];
-        deck[swapIdx] = d;
+        deck[swapIdx] = swapHold;
       }
       
-      for (let t = 0; deck.length > 0; t++) {
-        console.log("Stars: " +  deck[t].stars + " Effect: " + deck[t].effect);
-      }
+     /* for (let t = 0; t < deck.length; t++) {
+        console.log((t + 1) + ") Stars: " + deck[t].stars + " Ability: " + deck[t].ability);
+      }*/
+
+      console.log(deck.length);
       
-      /*if (Math.floor(Math.random() * 2) == 0) {
+      if (Math.floor(Math.random() * 2) == 0) {
         drawCards(5, deck, senderHand);
         drawCards(5, deck, opponentHand);
       }
       else {
         drawCards(5, deck, opponentHand);
         drawCards(5, deck, senderHand);
+      }
+      
+      /*console.log("Sender: " + senderHand.length);
+      console.log("Enemy: " + opponentHand.length);
+      
+      for (let s = 0; s < senderHand.length; s++) {
+        console.log(s + " sender) " + senderHand[s].stars + ", " + senderHand[s].ability);
+      }
+
+       for (let o = 0; o < opponentHand.length; o++) {
+        console.log(o + " oppo) " + opponentHand[o].stars + ", " + opponentHand[o].ability);
       }*/
+      turnNum++;
+      
+      console.log("PASSED DRAW");
     }
   
+    /*else*/ if (turnNum >= 6) {
+
+    }
+    else {
+      room.send("test");
+    }
     //gameLoop(sender, opponent, room);
   }
 }
 
 
-
+function drawCards (num, pile, hand) {
+  
+  this.num = num;
+  this.pile = pile;
+  this.hand = hand;  
+  
+  for (num; num > 0; num--) {
+    if (pile.length == 0) {
+      return; 
+    }
+    hand.push(pile.shift()); 
+    //console.log(num + ") " + hand[5 - num].stars + ", " + hand[5 - num].ability);
+  }
+}
