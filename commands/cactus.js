@@ -2,6 +2,12 @@ const game = require("../standbys/playCactus.js");
 const config = require("../config.json");
 
 exports.run = (client, message, args) => {
+  
+  if (message.channel.type === "dm") {
+    message.reply("You cannot challenge others over DM.");
+    return;
+  }
+  
   if (args.length !== 2) {
     message.reply(`Please enter the correct number of arguments in the format of "!cactus @mention roomName"`); 
     return;
@@ -53,11 +59,11 @@ exports.run = (client, message, args) => {
           return;
       }
       else {
-       sliceRoom = ("<#" + sliceRoom + ">"); 
+       sliceRoom = (channelId);; 
       }
     }
     else {
-      sliceRoom = ("#" + sliceRoom); 
+      sliceRoom = ("<#" + channelStr.id + ">"); 
     }
     
     const senderFilter = (reaction, user) => {
@@ -69,7 +75,7 @@ exports.run = (client, message, args) => {
     };  
       
     
-    message.channel.send(`Challenge **${opponent.username}** to a game of Cactus Cards in **${sliceRoom}**?`)
+    message.channel.send(`**${sender.username}**, do you challenge **${opponent.username}** to a game of Cactus Cards in **${sliceRoom}**?`)
     .then(message => {
       message.react("⭕")
       .then(() => message.react("✖"))
@@ -82,7 +88,7 @@ exports.run = (client, message, args) => {
               const challengeReq = message;
               opponent.createDM()
                 .then(dmChannel => {
-                  dmChannel.send(`User **${sender.username}** has challenged you to a game of Cactus Cards in the **${sliceRoom}** channel of the **${orgMessage.guild}** server. Do you accept?`)
+                  dmChannel.send(`User **${sender.username}** has challenged you to a game of Cactus Cards in the **${sliceRoom}** channel of the **${orgMessage.guild.name}** server. Do you accept?`)
                   .then(dmRq => {                      
                     challengeReq.edit(`Challenge sent to **${opponent.username}**. Awaiting responce...`)
                     challengeReq.clearReactions()
@@ -97,20 +103,20 @@ exports.run = (client, message, args) => {
                             
                             if (reply.emoji.name === "⭕") {
                               dmRq.delete();
-                              dmChannel.send(`Accepted challenge from **${sender.username}**! Please report to **${sliceRoom}** in the **${orgMessage.guild}** server to play.`);
-                              challengeReq.edit(`**${opponent.username}** has accepted your challenge, **${sender.username}**! Get ready!`);
-                              game.run(client, message, [orgMessage.author.id, opponent, sliceRoom]);
+                              dmChannel.send(`Accepted challenge from **${sender.username}** on **${orgMessage.guild.name}**! \n \nClick the room name here to play: **${sliceRoom}**!`);
+                              challengeReq.edit(`**${opponent.username}** has accepted your challenge in ${sliceRoom}, **${sender.username}**! Get ready!`);
+                              game.run(client, message, [orgMessage.author, opponent, sliceRoom]);
                               return;
                             }
                             else if (reply.emoji.name === "✖") {
                               dmRq.delete();
-                              dmChannel.send(`You have declined **${sender.username}**'s challenge from the **${orgMessage.guild}** server.`);
-                              challengeReq.edit(`**${opponent.username}** has declined the challenge, **${sender.username}**.`);                              
+                              dmChannel.send(`You have declined **${sender.username}**'s challenge from the **${(orgMessage.guild.name)}** server.`);
+                              challengeReq.edit(`**${opponent.username}** has declined your challenge, **${sender.username}**.`);                              
                             }
                           })
                           .catch(() => {
                             dmRq.delete();
-                            dmChannel.send(`Challenge from ${sender.username} has expired.`);
+                            dmChannel.send(`The challenge from **${sender.username}** of the **${orgMessage.guild.name} server has expired.`);
                             challengeReq.edit(`**${sender.username}**, your challenge to **${opponent.username}** has expired.`);
                           })
                         })
@@ -121,13 +127,13 @@ exports.run = (client, message, args) => {
            }
 
             else if (reaction.emoji.name === "✖") {
-              message.edit("Challenge cancelled.");              
+              message.edit(`**${sender.username}**, you have cancelled your challenge to **${opponent.username}**.`);              
               message.clearReactions();
             }            
           })
         .catch(err => {
           console.error(err);
-          message.edit(`Challenge request to **${opponent.username}** expired.`);
+          message.edit(`**${sender.username}**, your challenge request to **${opponent.username}** has expired.`);
           message.clearReactions();
         }); 
       });
