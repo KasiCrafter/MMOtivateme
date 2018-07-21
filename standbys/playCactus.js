@@ -115,6 +115,8 @@ function gameLoop(sender, opponent, room) {
   }
 
 
+  room.send(emojiPrint(sender, opponent));
+  
   drawBoard(sender, opponent, room);
 
   //gameLoop(sender, opponent, room);
@@ -151,49 +153,75 @@ async function drawBoard(sender, opponent, room) {
 }
 
 
-function emojiPrint (sender, opponent, senderField, opponentField) {
+function emojiPrint (sender, opponent){//, senderField, opponentField) {
   this.sender = sender;
   this.opponent = opponent;
   
   let output = "";
+  let lnCount = 0;
   
  
-  for (let z = 0; z < 10; z++) {
-    for (let a = 0; a < 4; a++) {
-      output+= "➖";
+  for (let z = 0; z < 5; z++) {    
+    
+    for (lnCount = 0; lnCount < 2; lnCount++) {
+      for (let a = 0; a < 4; a++) {
+        output+= "➖";      
+      }      
+      
+      if (lnCount == 0) {
+      
+        switch (z) {
+          case 0:
+            output += "🇦";
+            output += "⤵";
+            break;          
+          case 1:
+            output += "🇧";
+            output += "⤵";
+            break;
+          case 2:
+            output += "🇨";
+            output += "⤵";
+            break;
+          case 3:
+            output += "🇩";
+            output += "⤵";
+            break;
+          case 4:      
+            output += "🇪";
+            output += "⤵";
+            break;
+          case 5:
+            output += "➖➖";
+            break;
+        } 
+      }
     }
+    
 
-    switch (output.length) {
+      output += "\n"; 
 
-      case 4:
-        output += "🇦";
-        output += "⤵";
-        break;
-      case 34:
-        output += "🇧";
-        output += "⤵";
-        break;
-      case 64:
-        output += "🇨";
-        output += "⤵";
-        break;
-      case 94:
-        output += "🇩";
-        output += "⤵";
-        break;
-      case 114:      
-        output += "🇪";
-        output += "⤵";
-        break;
-      case 154:
-        output += "➖➖";
-        break;
-    }
+      output += "◼ |⭐1⃣ |";
 
+      output += "\〰〰〰"; //"🚫🚫🚫";
 
+      output += "|⭐1⃣ |◻"; 
+    
+      output += "\n"; 
+
+      output += "◼ |❎2⃣ |";
+
+      output += "\〰〰〰"; //"🚫🚫🚫";
+
+      output += "|❎2⃣ |◻";
+    
+      output += "\n"; 
     
   }
   
+  console.log(output.length);
+  
+  return output;  
   
 }
 
