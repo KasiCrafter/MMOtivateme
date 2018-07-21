@@ -59,11 +59,11 @@ exports.run = (client, message, args) => {
           return;
       }
       else {
-       sliceRoom = (channelId);; 
+       sliceRoom = (channelId); 
       }
     }
     else {
-      sliceRoom = ("<#" + channelStr.id + ">"); 
+      sliceRoom = (channelStr);//("<#" + channelStr.id + ">"); 
     }
     
     const senderFilter = (reaction, user) => {
@@ -77,68 +77,60 @@ exports.run = (client, message, args) => {
     
     message.channel.send(`**${sender.username}**, do you challenge **${opponent.username}** to a game of Cactus Cards in **${sliceRoom}**?`)
     .then(message => {
-      message.react("⭕")
-      .then(() => message.react("✖"))
-        .then(() => {
-          message.awaitReactions(senderFilter, {max: 1, time: (config.cactusTimer / 1), errors: ['time']})
-          .then(collected => {
-            const reaction = collected.first();
+      message.react("⭕").then(() => { message.react("✖")});
+      message.awaitReactions(senderFilter, {max: 1, time: (config.cactusTimer / 1), errors: ['time']})
+      .then(collected => {
+        const reaction = collected.first();
 
-            if (reaction.emoji.name === "⭕") {                                
-              const challengeReq = message;
-              opponent.createDM()
-                .then(dmChannel => {
-                  dmChannel.send(`User **${sender.username}** has challenged you to a game of Cactus Cards in the **${sliceRoom}** channel of the **${orgMessage.guild.name}** server. Do you accept?`)
-                  .then(dmRq => {                      
-                    challengeReq.edit(`Challenge sent to **${opponent.username}**. Awaiting responce...`)
-                    challengeReq.clearReactions()
-                    .then(() => {
-                      dmRq.react("⭕")                            
-                      .then(() => {
-                        dmRq.react("✖")
-                        .then(() => {
-                          dmRq.awaitReactions(opponentFilter, {max: 1, time: (config.cactusTimer / 1), errors: ["time"]})
-                          .then(duelRes => {
-                            let reply = duelRes.first();
-                            
-                            if (reply.emoji.name === "⭕") {
-                              dmRq.delete();
-                              dmChannel.send(`Accepted challenge from **${sender.username}** on **${orgMessage.guild.name}**! \n \nClick the room name here to play: **${sliceRoom}**!`);
-                              challengeReq.edit(`**${opponent.username}** has accepted your challenge in ${sliceRoom}, **${sender.username}**! Get ready!`);
-                              game.run(client, message, [orgMessage.author, opponent, sliceRoom]);
-                              return;
-                            }
-                            else if (reply.emoji.name === "✖") {
-                              dmRq.delete();
-                              dmChannel.send(`You have declined **${sender.username}**'s challenge from the **${(orgMessage.guild.name)}** server.`);
-                              challengeReq.edit(`**${opponent.username}** has declined your challenge, **${sender.username}**.`);                              
-                            }
-                          })
-                          .catch(() => {
-                            dmRq.delete();
-                            dmChannel.send(`The challenge from **${sender.username}** of the **${orgMessage.guild.name} server has expired.`);
-                            challengeReq.edit(`**${sender.username}**, your challenge to **${opponent.username}** has expired.`);
-                          })
-                        })
+        if (reaction.emoji.name === "⭕") {                                
+          const challengeReq = message;
+          opponent.createDM()
+            .then(dmChannel => {
+              dmChannel.send(`User **${sender.username}** has challenged you to a game of Cactus Cards in the **${sliceRoom}** channel of the **${orgMessage.guild.name}** server. Do you accept?`)
+              .then(dmRq => {                      
+                challengeReq.edit(`Challenge sent to **${opponent.username}**. Awaiting responce...`);
+                challengeReq.clearReactions()
+                .then(() => {
+                  dmRq.react("⭕").then(() => { dmRq.react("✖")}); 
+                  dmRq.awaitReactions(opponentFilter, {max: 1, time: (config.cactusTimer / 1), errors: ["time"]})
+                  .then(duelRes => {
+                        let reply = duelRes.first();
+
+                        if (reply.emoji.name === "⭕") {
+                          dmRq.delete();
+                          dmChannel.send(`Accepted challenge from **${sender.username}** on **${orgMessage.guild.name}**! \n \nClick the room name here to play: **${sliceRoom}**!`);
+                          challengeReq.edit(`**${opponent.username}** has accepted your challenge in ${sliceRoom}, **${sender.username}**! Get ready!`);
+                          game.run(client, message, [orgMessage.author, opponent, sliceRoom]);
+                          return;
+                        }
+                        else if (reply.emoji.name === "✖") {
+                          dmRq.delete();
+                          dmChannel.send(`You have declined **${sender.username}**'s challenge from the **${(orgMessage.guild.name)}** server.`);
+                          challengeReq.edit(`**${opponent.username}** has declined your challenge, **${sender.username}**.`);                              
+                        }
                       })
-                    })                    
+                    .catch(() => {
+                      dmRq.delete();
+                      dmChannel.send(`The challenge from **${sender.username}** of the **${orgMessage.guild.name}** server has expired.`);
+                      challengeReq.edit(`**${sender.username}**, your challenge to **${opponent.username}** has expired.`);
+                    //})
+                    })
                   })
-                });
-           }
+                })                    
+              });
+            }
 
-            else if (reaction.emoji.name === "✖") {
-              message.edit(`**${sender.username}**, you have cancelled your challenge to **${opponent.username}**.`);              
-              message.clearReactions();
-            }            
-          })
-        .catch(err => {
-          console.error(err);
-          message.edit(`**${sender.username}**, your challenge request to **${opponent.username}** has expired.`);
+        else if (reaction.emoji.name === "✖") {
+          message.edit(`**${sender.username}**, you have cancelled your challenge to **${opponent.username}**.`);              
           message.clearReactions();
-        }); 
-      });
-    });
-                    
+        }            
+      })
+      .catch(err => {
+        console.error(err);
+        message.edit(`**${sender.username}**, your challenge request to **${opponent.username}** has expired.`);
+        message.clearReactions();
+      }); 
+      });                    
   }
   console.log("Cactus exited successfully.");
 }
