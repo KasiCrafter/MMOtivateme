@@ -5,7 +5,7 @@
   "name": "hello-express",
   "version": "0.0.1",
   "description": "A simple Node app built on Express, instantly up and running.",
-  "main": "blank.js",
+  "main": "testbot.js",
   "scripts": {
     "start": "node testbot.js"
   },
@@ -13,7 +13,6 @@
     "canvas": "^2.0.0-alpha.12",
     "discord.js": "^11.3.2",
     "express": "^4.16.3",
-    "node-fetch": "^2.1.2",
     "snekfetch": "^4.0.4",
     "sqlite3": "^4.0.2"
   },
