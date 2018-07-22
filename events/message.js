@@ -19,11 +19,17 @@ exports.run = (client, message) => {
     }
     catch (err) {
       console.error(err);
-      message.reply(`Input command [**${command}**] does not exist`);
+      
+      if (command.startsWith(config.prefix)) {
+        message.reply(`Input command [**${command}**] has a redundant prefix.`);
+      }      
+      else {
+        message.reply(`Input command [**${command}**] does not exist`);
+      }
       return;
     }
   
-    if (message.author.id != config.ownerId && message.content.indexOf("cactus") == -1) {message.reply("You must be the bot owner to use this command!"); return;}
+    if (message.author.id != config.ownerId && message.content.indexOf("cc") == -1) {message.reply("You must be the bot owner to use this command!"); return;}
 
   
     try {

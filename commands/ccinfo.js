@@ -8,22 +8,27 @@ exports.run = (client, message, args) => {
   
   if (message.mentions.users.size > 0) {
     target = message.mentions.users.first();
+    
+    if (target.bot) {
+      message.reply(`User ${target} is a Bot, and therefore cannot have a profile.`); 
+      return;
+    }
   }
-  else {
+  else  {
    target = sender; 
   }
   
   
   db.serialize( () => {
     
-    db.run("CREATE TABLE IF NOT EXISTS ccData (userId TEXT, money INT, cardbacks TEXT, stats TEXT, inventory TEXT)");
+    db.run("CREATE TABLE IF NOT EXISTS ccData (userId TEXT, money INT, cardback TEXT, stats TEXT, streak TEXT, inventory TEXT)");
 
     db.get(`SELECT * FROM ccData WHERE userId = ${target.id}`, function(err, row) {
       if (!row) {
-        console.error(err); 
+        if (err) {console.error(err); }
         
         if (sender.id === target.id) {
-          db.run("INSERT INTO ccData (userId, money, cardBacks, stats, inventory) VALUES (?, ?, ?, ?, ?)", [sender.id, 0, "🌵", "0 Wins,0 Losses,0 Played", "Empty!"]);
+          db.run("INSERT INTO ccData (userId, money, cardback, stats, streak, inventory) VALUES (?, ?, ?, ?, ?, ?)", [sender.id, 0, "🌵", /*Wins/Loses/Total -->*/ "0,0,0", /*Streak, Highest streak -->*/ "0,0", "Empty!"]);
           message.reply("Profile created!");
         }
         else {
@@ -32,12 +37,21 @@ exports.run = (client, message, args) => {
         }        
       }
       
-
-        db.get(`SELECT * FROM ccData WHERE userId = ${target.id}`, function (err, row) {            
-
+        db.get(`SELECT * FROM ccData WHERE userId = ${target.id}`, function (err, row) {
           
+          let rawBacks = row.cardback.split(",");
+          let rawStats = row.stats.split(",");
+          let rawStreak = row.streak.split(",");
+          let rawInv = row.inventory.split(",");
+          let invOut = "";
           
+          for (let v = 0; v < rawInv.length; v++) {
+             invOut += `${1 + v}.) **${rawInv[v]}**\n`;
+          }
+
+          message.channel.send(`User **${target.username}** currently has:\n\n*__Money__*:\n**${row.money}**\n\n*__Card backs__*:\n${rawBacks[0]}\n${(rawBacks[1] || rawBacks[0])}\n\n*__Stats__*:\n**${rawStats[0]}** Wins, **${rawStats[1]}** Losses, **${rawStats[2]}** Games Played\n\n*__Win Streak__*:\n**${rawStreak[0]}**, (Highest: **${rawStreak[1]}**)\n\n*__Inventory__*:\n${invOut}`);
         });
     });
   });
 }
+
