@@ -1,4 +1,4 @@
-const game = require("../standbys/playCactus.js");
+const game = require("../passive/playCactus.js");
 const config = require("../config.json");
 
 exports.run = (client, message, args) => {

@@ -6,20 +6,8 @@ exports.run = (client, message) => {
   
     if (message.content.indexOf(config.prefix) !== 0) return;
     
-    if (message.content.indexOf("/") !== -1 || message.content.indexOf("..") !== -1) {message.channel.send("Nice try."); return;}  
+    if (message.content.indexOf("/") !== -1 || message.content.indexOf("..") !== -1) {message.channel.send("Nice try."); return;} 
   
-    if (message.author.id != config.ownerId && message.content.indexOf("cactus") == -1) {message.reply("You must be the bot owner to use this command!"); return;}
-    
-
-    if (config.doExp == true && message.channel.type !== "dm" && message.content.indexOf(config.prefix) === -1) {
-      try {
-        let standByFile = require("../standbys/leveling.js");
-        standByFile.run(client, message);
-      }
-      catch (err) {
-        console.error(err);
-      }      
-    }  
   
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();      
@@ -34,6 +22,8 @@ exports.run = (client, message) => {
       message.reply(`Input command [**${command}**] does not exist`);
       return;
     }
+  
+    if (message.author.id != config.ownerId && message.content.indexOf("cactus") == -1) {message.reply("You must be the bot owner to use this command!"); return;}
 
   
     try {

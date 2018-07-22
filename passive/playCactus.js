@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const caller = require("../commands/cactus.js");
+const caller = require("../commands/cc.js");
 const Canvas = require("canvas");
 const snekfetch = require("snekfetch");
 var turnNum = 0;
@@ -141,13 +141,11 @@ async function drawBoard(sender, opponent, room) {
   
 
   ctx.drawImage(sAvatar, 22, 0, 50, 50);
-  ctx.drawImage(sAvatar, 170, 0, 50, 50);
+  ctx.drawImage(oAvatar, 170, 0, 50, 50);
 
   const attachment = new Discord.Attachment(canvas.toBuffer(), 'test.png');
 
-
-
-  room.send("EYY!", attachment);
+  room.send(attachment);
 
   console.log("PASSED DRAW");
 }
@@ -203,7 +201,7 @@ function emojiPrint (sender, opponent){//, senderField, opponentField) {
 
       output += "◼ |⭐1⃣ |";
 
-      output += "\〰〰〰"; //"🚫🚫🚫";
+      output += "\〰〰〰"; 
 
       output += "|⭐1⃣ |◻"; 
     
@@ -211,7 +209,7 @@ function emojiPrint (sender, opponent){//, senderField, opponentField) {
 
       output += "◼ |❎2⃣ |";
 
-      output += "\〰〰〰"; //"🚫🚫🚫";
+      output += "\〰〰〰"; 
 
       output += "|❎2⃣ |◻";
     
