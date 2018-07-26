@@ -93,7 +93,7 @@ function gameLoop(sender, opponent, room) {
       drawCards(5, deck, senderHand);
     }
 
-    /*console.log("Sender: " + senderHand.length);
+    console.log("Sender: " + senderHand.length);
     console.log("Enemy: " + opponentHand.length);
 
     for (let s = 0; s < senderHand.length; s++) {
@@ -102,7 +102,7 @@ function gameLoop(sender, opponent, room) {
 
      for (let o = 0; o < opponentHand.length; o++) {
       console.log(o + " oppo) " + opponentHand[o].stars + ", " + opponentHand[o].ability);
-    }*/
+    }
     turnNum++;
 
     }
